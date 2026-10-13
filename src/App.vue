@@ -8,17 +8,6 @@ import 'leaflet/dist/leaflet.css'
 import uniData from './universities.js'
 const universities = ref(uniData)
 
-// TO-DO: Slot1 from Query(or pass in hidden payload), Slot2 & Slot3 autofill from most recent shortlist
-// Do some grouping in dropdown, shortlisted first, followed by all remaining unis
-// shortlistedUnis and remainingUnis - make dynamic
-const shortlistedUnis = computed(() => {
-    return universities.value.filter(uni => shortlistedIds.value.includes(uni.id))
-})
-
-const remainingUnis = computed(() => {
-    return universities.value.filter(uni => !shortlistedIds.value.includes(uni.id))
-})
-
 // SessionStorage Shortlist state initialization (Default to [3, 6] if empty)
 const SESSION_STORAGE_KEY = 'smu_geo_shortlisted_unis'
 
@@ -53,8 +42,17 @@ const toggleShortlist = (uniId) => {
     }
     sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(shortlistedIds.value))
 }
-// Lines 16-50 to be removed - temp solution for shortlisting demo
+// Lines 11-45 to be removed - temp solution for shortlisting demo
 
+const shortlistedUnis = computed(() => {
+    return universities.value.filter(uni => shortlistedIds.value.includes(uni.id))
+})
+
+const remainingUnis = computed(() => {
+    return universities.value.filter(uni => !shortlistedIds.value.includes(uni.id))
+})
+
+// TO-DO: Slot1 from Query(or pass in hidden payload)
 const uniSlots = ref([
     // universities.value[0]?.id || 
     null,
@@ -278,7 +276,7 @@ watch(
     d-flex and flex-column turns it into vertical layout -->
   <div class="container-fluid min-vh-100 d-flex flex-column p-0">
     <header>
-        <h1>HEADER</h1>
+        <h1 style="visibility: hidden;">HEADER</h1>
     </header>
 
     <!-- flex-grow-1 forces main element to expand and push footer to absolute bottom -->
@@ -623,7 +621,7 @@ watch(
     </main>
     
     <footer>
-        <h1>FOOTER</h1>
+        <h1 style="visibility: hidden;">FOOTER</h1>
     </footer>
   </div>
 </template>
