@@ -326,7 +326,7 @@ watch(
                             <div class="uni-logo d-flex align-items-center justify-content-center overflow-hidden">
                                 <img :src="uni.logo" class="img-fluid">
                             </div>
-                            <div class="text-secondary pb-3 mb-3 border-bottom">
+                            <div class="text-secondary pb-3 my-3 border-bottom">
                                 {{ uni.location.country }}
                             </div>
                             <div>
@@ -633,16 +633,17 @@ header, footer {
     text-align: center;
 }
 .uni-logo {
-    height: 210px;
+    height: 200px;
     width: 100%;
 }
 .uni-logo img {
     display: block;
-    max-width: 260px;
-    max-height: 190px;
-    width: auto;
-    height: auto;
+    height: 200px;
+    width: 200px;
+    max-width: 200px;
+    max-height: 200px;
     object-fit: contain;
+    margin: 0 auto;
 }
 .uni-map {
     width: 100%;
@@ -673,12 +674,14 @@ header, footer {
 /* md breakpoint - tablet */
 @media (max-width: 991.98px) {
     .uni-logo {
-        height: 160px;
+        height: 150px;
     }
 
     .uni-logo img {
-        max-width: 90%;
-        max-height: 140px;
+        width: 150px;
+        height: 150px;
+        max-width: 150px;
+        max-height: 150px;
     }
 
     .uni-map {
@@ -709,12 +712,14 @@ header, footer {
 /* xs breakpoint - mobile */
 @media (max-width: 575.98px) {
     .uni-logo {
-        height: 130px;
+        height: 120px;
     }
 
     .uni-logo img {
-        max-width: 85%;
-        max-height: 110px;
+        width: 120px;
+        height: 120px;
+        max-width: 120px;
+        max-height: 120px;
     }
 }
 </style>

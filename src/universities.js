@@ -5,7 +5,7 @@ const universities = [
         // Basic University Info
         name: "Singapore Management University",
         shortName: "SMU",
-        logo: "/images/logos/smu-logo.jpg",
+        logo: "/images/logos/university-of-new-south-wales-logo.webp",
         website: "https://www.smu.edu.sg/",
         images: [
             "",
@@ -64,7 +64,7 @@ const universities = [
         id: 2,
         name: "Yonsei University",
         shortName: "YSU",
-        logo: "/images/logos/ysu-logo.jpg",
+        logo: "/images/logos/yonsei-university-logo.webp",
         website: "https://www.yonsei.ac.kr/sites/en_sc/index.do",
         images: [
             "",
@@ -113,7 +113,7 @@ const universities = [
         id: 3,
         name: "University College London",
         shortName: "UCL",
-        logo: "/images/logos/ucl-logo.jpg",
+        logo: "/images/logos/university-college-london-logo.webp",
         website: "https://www.ucl.ac.uk/",
         images: [
             "",
@@ -162,7 +162,7 @@ const universities = [
         id: 4,
         name: "Kyoto University",
         shortName: "KyotoU",
-        logo: "/images/logos/kyotou-logo.jpg",
+        logo: "/images/logos/kyoto-university-logo.webp",
         website: "https://www.kyoto-u.ac.jp/en",
         images: [
             "",
@@ -211,7 +211,7 @@ const universities = [
         id: 5,
         name: "Fudan University",
         shortName: "FDU",
-        logo: "/images/logos/fdu-logo.jpg",
+        logo: "/images/logos/fudan-university-logo.webp",
         website: "https://www.fudan.edu.cn/en/",
         images: [
             "",
@@ -260,7 +260,7 @@ const universities = [
         id: 6,
         name: "Boston University",
         shortName: "BU",
-        logo: "/images/logos/bu-logo.jpg",
+        logo: "/images/logos/boston-university-logo.webp",
         website: "https://www.bu.edu/",
         images: [
             "",
