@@ -3,10 +3,83 @@ import { ref, computed, onMounted, nextTick, watch } from 'vue'
 import axios from 'axios'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import { createClient } from '@supabase/supabase-js'
 
-// TO-DO: To replace with Supabase
-import uniData from './universities.js'
-const universities = ref(uniData)
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
+const universities = ref([])
+const isLoading = ref(true)
+
+async function fetchUniversities() {
+    isLoading.value = true
+    try {
+        const { data, error } = await supabase
+            .from('universities')
+            .select(`
+                *,
+                university_languages ( instruction_language ),
+                exchange_periods ( * ),
+                university_costs ( * ),
+                university_modules ( count )
+            `)
+
+        if (error) throw error
+
+        universities.value = data.map(uni => {
+            const primaryPeriod = uni.exchange_periods?.[0] || {}
+            const languages = uni.university_languages?.map(l => l.instruction_language).join(', ') || 'N/A'
+            const cost = uni.university_costs?.[0] || uni.university_costs || {}
+            const modulesCount = uni.university_modules?.[0]?.count || 0
+
+            return {
+                id: uni.id,
+                name: uni.name,
+                logo: uni.logo_url,
+                website: uni.website_url,
+                location: {
+                    city: uni.city,
+                    state: uni.state,
+                    country: uni.country,
+                    region: uni.region,
+                    timezone: uni.timezone,
+                    coordinates: {
+                        lat: uni.lat,
+                        lon: uni.long
+                    }
+                },
+                cost: {
+                    currency: cost.currency_code || 'USD',
+                    total: cost.total ? Number(cost.total) : null,
+                    accommodation: cost.accommodation ? Number(cost.accommodation) : null,
+                    food: cost.food ? Number(cost.food) : null,
+                    transport: cost.transport ? Number(cost.transport) : null,
+                    personalExpenses: cost.personal_expenses ? Number(cost.personal_expenses) : null
+                },
+                academic: {
+                    modulesOffered: modulesCount,
+                    language: languages,
+                    modulesURL: uni.modules_url
+                },
+                exchange: {
+                    name: primaryPeriod.period_name || 'N/A',
+                    startDate: primaryPeriod.start_date || 'N/A',
+                    endDate: primaryPeriod.end_date || 'N/A'
+                },
+                climate: {
+                    minTemp: primaryPeriod.min_temperature ?? '-',
+                    maxTemp: primaryPeriod.max_temperature ?? '-',
+                    description: primaryPeriod.description || 'N/A'
+                }
+            }
+        })
+    } catch (err) {
+        console.error('Error fetching universities from Supabase:', err.message)
+    } finally {
+        isLoading.value = false
+    }
+}
 
 // SessionStorage Shortlist state initialization (Default to [3, 6] if empty)
 const SESSION_STORAGE_KEY = 'smu_geo_shortlisted_unis'
@@ -138,6 +211,7 @@ function formatLocation(location) {
 }
 
 function distanceFromSMU(coordinates) {
+    if (!coordinates?.lat || !coordinates?.lon) return '-'
     // Haversine Formula
     const lat1 = 1.29627
     const lon1 = 103.85185
@@ -184,6 +258,21 @@ function formatCost(value, homeCurrency, idx) {
     return formatCurrency(value, homeCurrency)
 }
 
+//  Exchange Helper
+function formatExchangeDate(dateStr) {
+    if (dateStr === null || dateStr === 'N/A') return 'N/A'
+
+    const [year, month, day] = dateStr.split('-')
+    if (!year || !month || !day) return dateStr
+
+    const date = new Date(year, month - 1, day)
+    
+    return date.toLocaleDateString('en-US', {
+        month: 'short',
+        year: 'numeric'
+    }) // Output: "Jan 2027"
+}
+
 // Maps - Leaflet API
 // TO-DO: Implement Google Maps API for better visuals
 const maps = ref([])
@@ -201,7 +290,7 @@ async function createMap(idx) {
     }
 
     // No uni selected
-    if (!uni || !element) {
+    if (!uni || !element || !uni.location.coordinates.lat) {
         return
     }
 
@@ -253,7 +342,8 @@ const ratesMap = computed(() => {
 })
 
 // Lifecycle
-onMounted(() => {
+onMounted(async () => {
+    await fetchUniversities()
     unisToCompare.value.forEach((uni, idx) => createMap(idx))
     fetchCurrencyRates()
 })
@@ -572,7 +662,7 @@ watch(
                                     Exchange Period
                                 </div>
                                 <div>
-                                    {{ uni.exchange.startDate }} - {{ uni.exchange.endDate }}
+                                    {{ formatExchangeDate(uni.exchange.startDate) }} - {{ formatExchangeDate(uni.exchange.endDate) }}
                                 </div>
                             </div>
                         </div>
@@ -602,7 +692,7 @@ watch(
                                     Temperature
                                 </div>
                                 <strong class="fs-4">
-                                    {{ uni.climate.minTemp }} - {{ uni.climate.maxTemp }} {{ uni.climate.unit }}
+                                    {{ uni.climate.minTemp }} - {{ uni.climate.maxTemp }} °C
                                 </strong>
                             </div>
                             <div class="py-3">
@@ -635,6 +725,7 @@ header, footer {
 .uni-logo {
     height: 200px;
     width: 100%;
+    margin-top: 4px;
 }
 .uni-logo img {
     display: block;
