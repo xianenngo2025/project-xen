@@ -3,11 +3,7 @@ import { ref, computed, onMounted, nextTick, watch } from 'vue'
 import axios from 'axios'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { createClient } from '@supabase/supabase-js'
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
-const supabase = createClient(supabaseUrl, supabaseAnonKey)
+import { supabase, STORAGE_URL } from '@/lib/supabase'
 
 const universities = ref([])
 const isLoading = ref(true)
@@ -33,10 +29,17 @@ async function fetchUniversities() {
             const cost = uni.university_costs?.[0] || uni.university_costs || {}
             const modulesCount = uni.university_modules?.[0]?.count || 0
 
+            let logoURL = ''
+            if (uni.logo_url) {
+                logoURL = uni.logo_url.startsWith('http') 
+                    ? uni.logo_url 
+                    : `${STORAGE_URL}/${uni.logo_url}`
+            }
+
             return {
                 id: uni.id,
                 name: uni.name,
-                logo: uni.logo_url,
+                logo: logoURL,
                 website: uni.website_url,
                 location: {
                     city: uni.city,
@@ -51,7 +54,10 @@ async function fetchUniversities() {
                 },
                 cost: {
                     currency: cost.currency_code || 'USD',
-                    total: cost.total ? Number(cost.total) : null,
+                    total: (Number(cost.accommodation) || 0) +
+                            (Number(cost.food) || 0) +
+                            (Number(cost.transport) || 0) + 
+                            (Number(cost.personal_expenses) || 0),
                     accommodation: cost.accommodation ? Number(cost.accommodation) : null,
                     food: cost.food ? Number(cost.food) : null,
                     transport: cost.transport ? Number(cost.transport) : null,
