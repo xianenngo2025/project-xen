@@ -520,7 +520,7 @@ watch(
                 <CompareRow :unis-to-compare="unisToCompare">
                     <template #default="{ uni, idx }">
                         <div class="text-secondary small mt-3 pt-3 border-top">
-                            Distance from Singapore
+                            Distance from SG
                         </div>
                     </template>
                 </CompareRow>  
@@ -646,7 +646,7 @@ watch(
                 <CompareRow :unis-to-compare="unisToCompare">
                     <template #default="{ uni, idx }">
                         <div class="text-secondary small pt-3">
-                            Modules Available
+                            Mapped Modules
                         </div>
                     </template>
                 </CompareRow>  
@@ -662,7 +662,7 @@ watch(
                 <CompareRow :unis-to-compare="unisToCompare">
                     <template #default="{ uni, idx }">
                         <div class="text-secondary small mt-3 pt-3 border-top">
-                            Language of Instruction
+                            Language
                         </div>
                     </template>
                 </CompareRow>  
@@ -679,7 +679,7 @@ watch(
                     <template #default="{ uni, idx }">
                         <div class="mt-3 pt-3 border-top">
                             <a :href="uni.academic.modulesURL" class="link-primary text-decoration-none custom-hover-link" 
-                                target="_blank" rel="noopener noreferrer">View  Available Modules<i class="bi bi-chevron-right ms-1" style="font-size: 12px;"></i></a>
+                                target="_blank" rel="noopener noreferrer">View Course Catalogue<i class="bi bi-chevron-right ms-1" style="font-size: 12px;"></i></a>
                         </div>
                     </template>
                 </CompareRow>
@@ -858,12 +858,12 @@ header, footer {
     .uni-logo img {
         width: 150px;
         height: 150px;
-        max-width: 150px;
-        max-height: 150px;
+        max-width: 100%;
+        max-height: 100%;
     }
 
     .uni-map {
-        height: 160px;
+        height: 150px;
     }
 }
 /* below md breakpoint - bottom border only */
@@ -886,9 +886,7 @@ header, footer {
         border-bottom: 1px solid black !important;
         border-radius: 0.375rem !important;
     }
-}
-/* xs breakpoint - mobile */
-@media (max-width: 575.98px) {
+
     .uni-logo {
         height: 120px;
     }
@@ -896,8 +894,39 @@ header, footer {
     .uni-logo img {
         width: 120px;
         height: 120px;
-        max-width: 120px;
-        max-height: 120px;
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    .uni-map {
+        height: 130px;
+    }
+
+    .sticky-uni-selector {
+        padding-top: 4px !important;
+        padding-bottom: 4px !important;
+    }
+}
+/* xs breakpoint - mobile */
+@media (max-width: 575.98px) {
+    .uni-logo {
+        height: 100px;
+    }
+
+    .uni-logo img {
+        width: 100px;
+        height: 100px;
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    .uni-map {
+        height: 120px;
+    }
+
+    .sticky-uni-selector {
+        padding-top: 4px !important;
+        padding-bottom: 4px !important;
     }
 }
 </style>
