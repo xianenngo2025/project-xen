@@ -2,17 +2,12 @@
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import 'bootstrap-icons/font/bootstrap-icons.css'
+import './assets/theme.css'
 import App from './App.vue'
 import router from './router'
-
-// Import Bootstrap CSS
-import 'bootstrap/dist/css/bootstrap.min.css';
-
-// (Optional) Import Bootstrap JS if you need dropdowns, modals, etc.
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-
-// Import Bootstrap Icons
-import 'bootstrap-icons/font/bootstrap-icons.css'
 
 const app = createApp(App)
 

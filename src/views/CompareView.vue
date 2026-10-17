@@ -543,9 +543,9 @@ watch(
                 <CompareRow :unis-to-compare="unisToCompare"  special-vif-class="h-100">
                     <template #default="{ uni, idx }">
                         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center h-100 gap-3 pt-3">
-                            <h6 class="mb-0 text-center text-md-start text-break ">
+                            <div class="text-break text-center text-md-start text-secondary fw-semibold">
                                 1 SGD = {{ ratesMap[uni.cost.currency] || '—'}} {{ uni.cost.currency }}
-                            </h6>
+                            </div>
                             <div class="btn-group btn-group-sm">
                                 <button class="btn" :class="uniCurrencies[idx] === 'home' ? 'btn-primary' : 'btn-outline-primary'"
                                 @click="uniCurrencies[idx] = 'home'">{{ uni.cost.currency }}</button>
